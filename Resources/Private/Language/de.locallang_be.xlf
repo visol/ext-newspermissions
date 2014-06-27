@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-06-02T11:47:18Z" product-name="newspermissions">
+		<header/>
+		<body>
+			<trans-unit id="listmodule_editlock">
+				<source>This record cannot be edited because it has categories that are not defined in your BE usergroups.</source>
+				<target>Diese Meldung kann nicht bearbeitet werden, da Sie aufgrund Ihrer Benutzergruppen nicht Zugriff auf alle Kategorien der Meldung haben.</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
