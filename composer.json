@@ -1,0 +1,7 @@
+{
+  "name": "visol/newspermissions",
+  "type": "typo3-cms-extension",
+  "description": "News Permissions",
+  "homepage": "https://github.com/visol/ext-newspermissions",
+  "license": ["GPL-2.0+"]
+}
