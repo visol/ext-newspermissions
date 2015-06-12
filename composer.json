@@ -3,5 +3,9 @@
   "type": "typo3-cms-extension",
   "description": "News Permissions",
   "homepage": "https://github.com/visol/ext-newspermissions",
-  "license": ["GPL-2.0+"]
+  "license": ["GPL-2.0+"],
+	"require": {
+		"georgringer/news": ">=3.1.0,<=3.99.99",
+		"visol/roq-newsevent": ">=3.0.0,<=3.99.99"
+	}
 }
