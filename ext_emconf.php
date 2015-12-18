@@ -11,25 +11,23 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'News Permissions',
-	'description' => 'Manipulate action icons in the News list to mark News items that cannot be edited because of missing category permissions',
-	'category' => 'be',
-	'author' => 'Lorenz Ulrich',
-	'author_email' => 'lorenz.ulrich@visol.ch',
-	'state' => 'stable',
-	'internal' => '',
-	'uploadfolder' => '0',
-	'createDirs' => '',
-	'clearCacheOnLoad' => 0,
-	'version' => '1.0.0',
-	'constraints' => array(
-		'depends' => array(
-			'typo3' => '6.2.0-6.2.99',
-			'news' => '3.1.0-3.99.99',
-		),
-		'conflicts' => array(
-		),
-		'suggests' => array(
-		),
-	),
+    'title' => 'News Permissions',
+    'description' => 'Manipulate action icons in the News list to mark News items that cannot be edited because of missing category permissions',
+    'category' => 'be',
+    'author' => 'Lorenz Ulrich',
+    'author_email' => 'lorenz.ulrich@visol.ch',
+    'state' => 'stable',
+    'internal' => '',
+    'uploadfolder' => '0',
+    'createDirs' => '',
+    'clearCacheOnLoad' => 0,
+    'version' => '1.0.0',
+    'constraints' => array(
+        'depends' => array(
+            'typo3' => '6.2.0-6.2.99',
+            'news' => '3.1.0-3.99.99',
+        ),
+        'conflicts' => array(),
+        'suggests' => array(),
+    ),
 );
