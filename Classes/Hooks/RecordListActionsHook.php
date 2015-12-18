@@ -63,7 +63,7 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
 	 * @return array The modified control-icons
 	 */
 	public function makeControl($table, $row, $cells, &$parentObject) {
-		if ($table === 'tx_news_domain_model_news' && !\Tx_News_Service_AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+		if ($table === 'tx_news_domain_model_news' && !\GeorgRinger\News\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
 			$spaceIcon = IconUtility::getSpriteIcon('empty-empty', array('style' => 'background-position: 0 10px;'));
 			$cells['edit'] = '<a href="#" title="' . $GLOBALS['LANG']->sL(self::LLPATH . 'listmodule_editlock', TRUE) . '">' . IconUtility::getSpriteIcon('apps-pagetree-drag-place-denied') . '</a>';
 			$cells['delete'] = $spaceIcon;
