@@ -14,12 +14,12 @@ namespace Visol\Newspermissions\Hooks;
  * The TYPO3 project - inspiring people to share!
  */
 use TYPO3\CMS\Backend\Utility\IconUtility;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Hook to modify control icons for news items
- *
- * @package TYPO3
- * @subpackage tx_news
  */
 class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface
 {
@@ -42,6 +42,13 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
      */
     public function makeClip($table, $row, $cells, &$parentObject)
     {
+        if ($table === 'tx_news_domain_model_news' && !\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+            $cells['pasteInto'] = '';
+            $cells['pasteAfter'] = '';
+            $cells['copy'] = '';
+            $cells['cut'] = '';
+        }
+
         return $cells;
     }
 
@@ -57,13 +64,28 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
     public function makeControl($table, $row, $cells, &$parentObject)
     {
         if ($table === 'tx_news_domain_model_news' && !\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
-            $spaceIcon = IconUtility::getSpriteIcon('empty-empty', array('style' => 'background-position: 0 10px;'));
-            $cells['edit'] = '<a href="#" title="' . $GLOBALS['LANG']->sL(self::LLPATH . 'listmodule_editlock',
-                    true) . '">' . IconUtility::getSpriteIcon('apps-pagetree-drag-place-denied') . '</a>';
-            $cells['delete'] = $spaceIcon;
+            $spaceIcon = '';
+
+            $cells['edit'] = '
+                <div class="btn btn-default" title="' . $GLOBALS['LANG']->sL(self::LLPATH . 'listmodule_editlock', true) . '">
+                    ' . $this->getIconFactory()->getIcon('apps-pagetree-drag-place-denied', Icon::SIZE_SMALL) . '             
+                </div>';
+
             $cells['hide'] = $spaceIcon;
+            $cells['delete'] = $spaceIcon;
+            $cells['viewBig'] = $spaceIcon;
             $cells['history'] = $spaceIcon;
+            $cells['new'] = $spaceIcon;
+
+            $cells['primary']['edit'] = $cells['edit'];
+            $cells['primary']['hide'] = $cells['hide'];
+            $cells['primary']['delete'] = $cells['delete'];
+
+            $cells['secondary']['viewBig'] = $cells['viewBig'];
+            $cells['secondary']['history'] = $cells['history'];
+            $cells['secondary']['new'] = $cells['new'];
         }
+
         return $cells;
     }
 
@@ -94,5 +116,40 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
     {
         return $cells;
     }
+
+    /**
+     * Hook from EXT:gridelements to modify entire row of the RecordList
+     *
+     * @param string $table The current database table
+     * @param array $row The current record row
+     * @param int $level
+     * @param array $theData Data array with rendered content for RecordList
+     * @param object $parentObject Instance of calling (parent) object
+     */
+    public function checkChildren($table, $row, $level, &$theData, &$parentObject)
+    {
+        if ($table === 'tx_news_domain_model_news' && !\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+            $title = $theData['title'];
+            $title = preg_replace("/<\\/?a(\\s+.*?>|>)/", "", $title);
+
+            $theData['title'] = $title;
+            $theData['__label'] = $title;
+
+            //$theData['_CONTROL_'] = '';
+            $theData['_CLIPBOARD_'] = '';
+            $theData['_LOCALIZATION_'] = '';
+            $theData['_LOCALIZATION_b'] = '';
+        }
+    }
+
+    /**
+     * @return IconFactory
+     */
+    protected function getIconFactory()
+    {
+        return GeneralUtility::makeInstance(IconFactory::class);
+    }
+
+
 
 }
