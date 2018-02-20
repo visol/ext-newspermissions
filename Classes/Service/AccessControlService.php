@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Service for access control related stuff
  *
  * @package TYPO3
- * @subpackage tx_news
+ * @subpackage tx_newspermissions
  */
 class AccessControlService extends \GeorgRinger\News\Service\AccessControlService
 {
@@ -35,20 +35,21 @@ class AccessControlService extends \GeorgRinger\News\Service\AccessControlServic
      */
     public static function userHasCategoryPermissionsForRecord(array $newsRecord)
     {
-        if (!EmConfiguration::getSettings()->getCategoryBeGroupTceFormsRestriction()) {
-            return true;
-        }
-
         if (self::getBackendUser()->isAdmin()) {
             // an admin may edit all news
             return true;
         }
-        // If there are any categories with denied access, the user has no permission
-        if (count(self::getAccessDeniedCategories($newsRecord))) {
-            return false;
-        } else {
+
+        if (!EmConfiguration::getSettings()->getCategoryBeGroupTceFormsRestriction()) {
             return true;
         }
+
+        // If there are any categories with denied access, the user has no permission
+        if (count(self::getAccessDeniedCategories($newsRecord)) === 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

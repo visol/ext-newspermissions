@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Hook into FormDataProvider
  *
  * @package TYPO3
+ * @subpackage tx_newspermissions
  */
 class FormDataProvider implements FormDataProviderInterface
 {

@@ -42,7 +42,11 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
      */
     public function makeClip($table, $row, $cells, &$parentObject)
     {
-        if ($table === 'tx_news_domain_model_news' && !\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+        if ($table !== 'tx_news_domain_model_news') {
+            return $cells;
+        }
+
+        if (!\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
             $cells['pasteInto'] = '';
             $cells['pasteAfter'] = '';
             $cells['copy'] = '';
@@ -63,7 +67,11 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
      */
     public function makeControl($table, $row, $cells, &$parentObject)
     {
-        if ($table === 'tx_news_domain_model_news' && !\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+        if ($table !== 'tx_news_domain_model_news') {
+            return $cells;
+        }
+
+        if (!\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
             $spaceIcon = '';
 
             $cells['edit'] = '
@@ -128,7 +136,11 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
      */
     public function checkChildren($table, $row, $level, &$theData, &$parentObject)
     {
-        if ($table === 'tx_news_domain_model_news' && !\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+        if ($table !== 'tx_news_domain_model_news') {
+            return;
+        }
+
+        if (!\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
             $title = $theData['title'];
             $title = preg_replace("/<\\/?a(\\s+.*?>|>)/", "", $title);
 
