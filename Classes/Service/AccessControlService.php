@@ -24,7 +24,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage tx_news
  */
-class AccessControlService extends \GeorgRinger\News\Service\AccessControlService {
+class AccessControlService extends \GeorgRinger\News\Service\AccessControlService
+{
 
     /**
      * Check if a user has access to all categories of a news record
@@ -32,56 +33,57 @@ class AccessControlService extends \GeorgRinger\News\Service\AccessControlServic
      * @param array $newsRecord
      * @return boolean
      */
-    public static function userHasCategoryPermissionsForRecord(array $newsRecord) {
+    public static function userHasCategoryPermissionsForRecord(array $newsRecord)
+    {
         if (!EmConfiguration::getSettings()->getCategoryBeGroupTceFormsRestriction()) {
-            return TRUE;
+            return true;
         }
 
         if (self::getBackendUser()->isAdmin()) {
             // an admin may edit all news
-            return TRUE;
+            return true;
         }
         // If there are any categories with denied access, the user has no permission
         if (count(self::getAccessDeniedCategories($newsRecord))) {
-            return FALSE;
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
-	/**
-	 * Get an array with the uid and title of all categories the user doesn't have access to
-	 *
+    /**
+     * Get an array with the uid and title of all categories the user doesn't have access to
+     *
      * In EXT:news, this method was changed to also include sub-categories of the categories a user has permission
      * to use. Since this is not the use-case of this extension, this method is overridden.
      *
      * The method userHasCategoryPermissionsForRecord is unchanged, but needs to be copied because it is static.
      *
-	 * @param array $newsRecord
-	 * @return array
-	 */
-	public static function getAccessDeniedCategories(array $newsRecord) {
-		if (self::getBackendUser()->isAdmin()) {
-			// an admin may edit all news so no categories without access
-			return array();
-		}
+     * @param array $newsRecord
+     * @return array
+     */
+    public static function getAccessDeniedCategories(array $newsRecord)
+    {
+        if (self::getBackendUser()->isAdmin()) {
+            // an admin may edit all news so no categories without access
+            return [];
+        }
 
-		// no category mounts set means access to all
-		$backendUserCategories = self::getBackendUser()->getCategoryMountPoints();
-		if ($backendUserCategories === array()) {
-			return array();
-		}
+        // no category mounts set means access to all
+        $backendUserCategories = self::getBackendUser()->getCategoryMountPoints();
+        if ($backendUserCategories === []) {
+            return [];
+        }
 
-		$newsRecordCategories = self::getCategoriesForNewsRecord($newsRecord);
+        $newsRecordCategories = self::getCategoriesForNewsRecord($newsRecord);
 
-		// Remove categories the user has access to
-		foreach ($newsRecordCategories as $key => $newsRecordCategory) {
-			if (in_array($newsRecordCategory['uid'], $backendUserCategories)) {
-				unset($newsRecordCategories[$key]);
-			}
-		}
+        // Remove categories the user has access to
+        foreach ($newsRecordCategories as $key => $newsRecordCategory) {
+            if (in_array($newsRecordCategory['uid'], $backendUserCategories)) {
+                unset($newsRecordCategories[$key]);
+            }
+        }
 
-		return $newsRecordCategories;
-	}
-
+        return $newsRecordCategories;
+    }
 }

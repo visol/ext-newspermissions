@@ -23,63 +23,82 @@ use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
  * @package TYPO3
  * @subpackage tx_news
  */
-class DataHandler extends \GeorgRinger\News\Hooks\DataHandler {
+class DataHandler extends \GeorgRinger\News\Hooks\DataHandler
+{
 
-	/**
-	 * Prevent saving of a news record if the editor doesn't have access to all categories of the news record
-	 *
-	 * @param array $fieldArray
-	 * @param string $table
-	 * @param int $id
-	 * @param $parentObject \TYPO3\CMS\Core\DataHandling\DataHandler
-	 */
-	public function processDatamap_preProcessFieldArray(&$fieldArray, $table, $id, $parentObject) {
-		if ($table === 'tx_news_domain_model_news') {
-			// check permissions of assigned categories
-			if (is_int($id) && !$this->getBackendUser()->isAdmin()) {
-				$newsRecord = BackendUtilityCore::getRecord($table, $id);
-				if (!AccessControlService::userHasCategoryPermissionsForRecord($newsRecord)) {
-					$parentObject->log($table, $id, 2, 0, 1, "processDatamap: Attempt to modify a record from table '%s' without permission. Reason: the record has one or more categories assigned that are not defined in your BE usergroup.", 1, array($table));
-					// unset fieldArray to prevent saving of the record
-					$fieldArray = array();
-				} else {
+    /**
+     * Prevent saving of a news record if the editor doesn't have access to all categories of the news record
+     *
+     * @param array $fieldArray
+     * @param string $table
+     * @param int $id
+     * @param $parentObject \TYPO3\CMS\Core\DataHandling\DataHandler
+     */
+    public function processDatamap_preProcessFieldArray(&$fieldArray, $table, $id, $parentObject)
+    {
+        if ($table === 'tx_news_domain_model_news') {
+            // check permissions of assigned categories
+            if (is_int($id) && !$this->getBackendUser()->isAdmin()) {
+                $newsRecord = BackendUtilityCore::getRecord($table, $id);
+                if (!AccessControlService::userHasCategoryPermissionsForRecord($newsRecord)) {
+                    $parentObject->log(
+                        $table,
+                        $id,
+                        2,
+                        0,
+                        1,
+                        "processDatamap: Attempt to modify a record from table '%s' without permission.
+                        Reason: the record has one or more categories assigned that are not defined in
+                        your BE usergroup.",
+                        1,
+                        [$table]
+                    );
+                    // unset fieldArray to prevent saving of the record
+                    $fieldArray = [];
+                } else {
+                    // If the category relation has been modified, no | is found anymore
+                    if (strpos($fieldArray['categories'], '|') === false) {
+                        $deniedCategories = AccessControlService::getAccessDeniedCategories($newsRecord);
+                        if (is_array($deniedCategories)) {
+                            foreach ($deniedCategories as $deniedCategory) {
+                                $fieldArray['categories'] .= ',' . $deniedCategory['uid'];
+                            }
+                            $fieldArray['categories'] = trim($fieldArray['categories'], ',');
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-					// If the category relation has been modified, no | is found anymore
-					if (strpos($fieldArray['categories'], '|') === FALSE) {
-
-						$deniedCategories = AccessControlService::getAccessDeniedCategories($newsRecord);
-						if (is_array($deniedCategories)) {
-							foreach($deniedCategories as $deniedCategory) {
-								$fieldArray['categories'] .= ',' . $deniedCategory['uid'];
-							}
-							$fieldArray['categories'] = trim($fieldArray['categories'], ',');
-						}
-					}
-
-				}
-
-			}
-		}
-	}
-
-	/**
-	 * Prevent deleting/moving of a news record if the editor doesn't have access to all categories of the news record
-	 *
-	 * @param string $command
-	 * @param string $table
-	 * @param int $id
-	 * @param string $value
-	 * @param $parentObject \TYPO3\CMS\Core\DataHandling\DataHandler
-	 */
-	public function processCmdmap_preProcess($command, &$table, $id, $value, $parentObject) {
-		if ($table === 'tx_news_domain_model_news' && !$this->getBackendUser()->isAdmin() && is_integer($id) && $command !== 'undelete') {
-			$newsRecord = BackendUtilityCore::getRecord($table, $id);
-			if (!AccessControlService::userHasCategoryPermissionsForRecord($newsRecord)) {
-				$parentObject->log($table, $id, 2, 0, 1, "processCmdmap: Attempt to " . $command . " a record from table '%s' without permission. Reason: the record has one or more categories assigned that are not defined in the BE usergroup.", 1, array($table));
-				// unset table to prevent saving
-				$table = '';
-			}
-		}
-	}
-
+    /**
+     * Prevent deleting/moving of a news record if the editor doesn't have access to all categories of the news record
+     *
+     * @param string $command
+     * @param string $table
+     * @param int $id
+     * @param string $value
+     * @param $parentObject \TYPO3\CMS\Core\DataHandling\DataHandler
+     */
+    public function processCmdmap_preProcess($command, &$table, $id, $value, $parentObject)
+    {
+        if ($table === 'tx_news_domain_model_news' && !$this->getBackendUser()->isAdmin() && is_integer($id) && $command !== 'undelete') {
+            $newsRecord = BackendUtilityCore::getRecord($table, $id);
+            if (!AccessControlService::userHasCategoryPermissionsForRecord($newsRecord)) {
+                $parentObject->log(
+                    $table,
+                    $id,
+                    2,
+                    0,
+                    1,
+                    "processCmdmap: Attempt to " . $command . " a record from table '%s' without permission.
+                    Reason: the record has one or more categories assigned that are not defined in the BE usergroup.",
+                    1,
+                    [$table]
+                );
+                // unset table to prevent saving
+                $table = '';
+            }
+        }
+    }
 }

@@ -149,7 +149,4 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
     {
         return GeneralUtility::makeInstance(IconFactory::class);
     }
-
-
-
 }

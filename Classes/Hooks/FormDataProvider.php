@@ -24,14 +24,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package TYPO3
  */
-class FormDataProvider implements FormDataProviderInterface {
+class FormDataProvider implements FormDataProviderInterface
+{
 
-	/**
-	 * Path to the locallang file
-	 *
-	 * @var string
-	 */
-	const LLPATH = 'LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:';
+    /**
+     * Path to the locallang file
+     *
+     * @var string
+     */
+    const LLPATH = 'LLL:EXT:news/Resources/Private/Language/locallang_be.xlf:';
 
     /**
      * Set all fields from TCA to readonly on missing permissions
@@ -64,7 +65,7 @@ class FormDataProvider implements FormDataProviderInterface {
         // TODO: Format output of flashMessage.
         // HTML has been removed in TYPO3 7.4. See https://docs.typo3.org/typo3cms/extensions/core/7.6/Changelog/7.4/Breaking-67546-CleanupFlashMessageRendering.html
 
-        $flashMessageContent = $GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.content', TRUE);
+        $flashMessageContent = $GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.content', true);
         $accessDeniedCategories = AccessControlService::getAccessDeniedCategories($row);
         foreach ($accessDeniedCategories as $accessDeniedCategory) {
             $flashMessageContent .= $accessDeniedCategory['title'] . ' [' . $accessDeniedCategory['uid'] . '] ';
@@ -74,7 +75,7 @@ class FormDataProvider implements FormDataProviderInterface {
         $flashMessage = GeneralUtility::makeInstance(
             \TYPO3\CMS\Core\Messaging\FlashMessage::class,
             $flashMessageContent,
-            $GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.header', TRUE),
+            $GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.header', true),
             FlashMessage::WARNING
         );
 
