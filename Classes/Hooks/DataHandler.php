@@ -65,15 +65,17 @@ class DataHandler extends \GeorgRinger\News\Hooks\DataHandler
             );
             // unset fieldArray to prevent saving of the record
             $fieldArray = [];
-        } elseif (strpos($fieldArray['categories'], '|') === false) {
-            // If the category relation has been modified, no | is found anymore
-
+        } elseif (isset($fieldArray['categories']) && strpos($fieldArray['categories'], '|') === false) {
             $deniedCategories = AccessControlService::getAccessDeniedCategories($newsRecord);
-            foreach ($deniedCategories as $deniedCategory) {
-                $fieldArray['categories'] .= ',' . $deniedCategory['uid'];
+            if (is_array($deniedCategories)) {
+                foreach ($deniedCategories as $deniedCategory) {
+                    $fieldArray['categories'] .= ',' . $deniedCategory['uid'];
+                }
+                // Check if the categories are not empty,
+                if (!empty($fieldArray['categories'])) {
+                    $fieldArray['categories'] = trim($fieldArray['categories'], ',');
+                }
             }
-
-            $fieldArray['categories'] = trim($fieldArray['categories'], ',');
         }
     }
 
