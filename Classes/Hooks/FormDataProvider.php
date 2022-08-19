@@ -14,6 +14,8 @@ namespace Visol\Newspermissions\Hooks;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use Visol\Newspermissions\Service\AccessControlService;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -47,7 +49,7 @@ class FormDataProvider implements FormDataProviderInterface
             return $result;
         }
 
-        if (!\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($result['databaseRow'])) {
+        if (!AccessControlService::userHasCategoryPermissionsForRecord($result['databaseRow'])) {
             foreach ($result['processedTca']['columns'] as $fieldName => $fieldData) {
                 $result['processedTca']['columns'][$fieldName]['config']['readOnly'] = 1;
             }
@@ -66,7 +68,7 @@ class FormDataProvider implements FormDataProviderInterface
         // TODO: Format output of flashMessage.
         // HTML has been removed in TYPO3 7.4. See https://docs.typo3.org/typo3cms/extensions/core/7.6/Changelog/7.4/Breaking-67546-CleanupFlashMessageRendering.html
 
-        $flashMessageContent = $GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.content', true);
+        $flashMessageContent = htmlspecialchars($GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.content'));
         $accessDeniedCategories = AccessControlService::getAccessDeniedCategories($row);
         foreach ($accessDeniedCategories as $accessDeniedCategory) {
             $flashMessageContent .= $accessDeniedCategory['title'] . ' [' . $accessDeniedCategory['uid'] . '] ';
@@ -74,14 +76,14 @@ class FormDataProvider implements FormDataProviderInterface
 
         /** @var FlashMessage $flashMessage */
         $flashMessage = GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Messaging\FlashMessage::class,
+            FlashMessage::class,
             $flashMessageContent,
-            $GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.header', true),
-            FlashMessage::WARNING
+            htmlspecialchars($GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.header')),
+            AbstractMessage::WARNING
         );
 
         /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
-        $flashMessageService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
+        $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
 
         /** @var $defaultFlashMessageQueue \TYPO3\CMS\Core\Messaging\FlashMessageQueue */
         $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();

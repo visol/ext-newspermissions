@@ -13,6 +13,8 @@ namespace Visol\Newspermissions\Hooks;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface;
+use Visol\Newspermissions\Service\AccessControlService;
 use TYPO3\CMS\Backend\Utility\IconUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -21,7 +23,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Hook to modify control icons for news items
  */
-class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface
+class RecordListActionsHook implements RecordListHookInterface
 {
 
     /**
@@ -46,7 +48,7 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
             return $cells;
         }
 
-        if (!\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+        if (!AccessControlService::userHasCategoryPermissionsForRecord($row)) {
             $cells['pasteInto'] = '';
             $cells['pasteAfter'] = '';
             $cells['copy'] = '';
@@ -71,11 +73,11 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
             return $cells;
         }
 
-        if (!\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+        if (!AccessControlService::userHasCategoryPermissionsForRecord($row)) {
             $spaceIcon = '';
 
             $cells['edit'] = '
-                <div class="btn btn-default" title="' . $GLOBALS['LANG']->sL(self::LLPATH . 'listmodule_editlock', true) . '">
+                <div class="btn btn-default" title="' . htmlspecialchars($GLOBALS['LANG']->sL(self::LLPATH . 'listmodule_editlock')) . '">
                     ' . $this->getIconFactory()->getIcon('apps-pagetree-drag-place-denied', Icon::SIZE_SMALL) . '             
                 </div>';
 
@@ -140,7 +142,7 @@ class RecordListActionsHook implements \TYPO3\CMS\Recordlist\RecordList\RecordLi
             return;
         }
 
-        if (!\Visol\Newspermissions\Service\AccessControlService::userHasCategoryPermissionsForRecord($row)) {
+        if (!AccessControlService::userHasCategoryPermissionsForRecord($row)) {
             $title = $theData['title'];
             $title = preg_replace("/<\\/?a(\\s+.*?>|>)/", "", $title);
 

@@ -3,17 +3,24 @@
 	"type": "typo3-cms-extension",
 	"description": "News Permissions",
 	"homepage": "https://github.com/visol/ext-newspermissions",
-	"license": ["GPL-2.0-or-later"],
-	"require": {
-		"typo3/cms-core": "^8.7.1",
-		"georgringer/news": ">=6.3.0,<=6.99.99"
-	},
+	"license": [
+		"GPL-2.0-or-later"
+	],
 	"suggest": {
-		"typo3-ter/gridelements": "^8.0"
+		"gridelementsteam/gridelements": "^11.0 || dev-master"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "newspermissions"
+		}
 	},
 	"autoload": {
 		"psr-4": {
 			"Visol\\Newspermissions\\": "Classes"
 		}
+	},
+	"require": {
+		"typo3/cms-core": "^11.5",
+		"georgringer/news": "^9"
 	}
 }
