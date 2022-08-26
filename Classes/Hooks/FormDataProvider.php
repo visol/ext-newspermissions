@@ -82,7 +82,7 @@ class FormDataProvider implements FormDataProviderInterface
             AbstractMessage::WARNING
         );
 
-        /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
+        /** @var FlashMessageService $flashMessageService */
         $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
 
         /** @var $defaultFlashMessageQueue \TYPO3\CMS\Core\Messaging\FlashMessageQueue */

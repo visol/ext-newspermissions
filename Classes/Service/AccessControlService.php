@@ -14,7 +14,8 @@ namespace Visol\Newspermissions\Service;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use TYPO3\CMS\Backend\Utility\BackendUtility;
+
+use GeorgRinger\News\Domain\Model\Dto\EmConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,14 +33,15 @@ class AccessControlService extends \GeorgRinger\News\Service\AccessControlServic
      * @param array $newsRecord
      * @return boolean
      */
-    public static function userHasCategoryPermissionsForRecord(array $newsRecord)
+    public static function userHasCategoryPermissionsForRecord(array $newsRecord): bool
     {
         if (self::getBackendUser()->isAdmin()) {
             // an admin may edit all news
             return true;
         }
 
-        if (!EmConfiguration::getSettings()->getCategoryBeGroupTceFormsRestriction()) {
+        $settings = GeneralUtility::makeInstance(EmConfiguration::class);
+        if (!$settings->getCategoryBeGroupTceFormsRestriction()) {
             return true;
         }
 
@@ -62,7 +64,7 @@ class AccessControlService extends \GeorgRinger\News\Service\AccessControlServic
      * @param array $newsRecord
      * @return array
      */
-    public static function getAccessDeniedCategories(array $newsRecord)
+    public static function getAccessDeniedCategories(array $newsRecord): array
     {
         if (self::getBackendUser()->isAdmin()) {
             // an admin may edit all news so no categories without access
