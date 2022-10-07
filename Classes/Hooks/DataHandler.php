@@ -14,16 +14,15 @@ namespace Visol\Newspermissions\Hooks;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use GeorgRinger\News\Hooks\DataHandlerHook;
 use Visol\Newspermissions\Service\AccessControlService;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
 
 /**
  * Hook into tcemain which is used to show preview of news item
- *
- * @package TYPO3
- * @subpackage tx_newspermissions
  */
-class DataHandler extends \GeorgRinger\News\Hooks\DataHandler
+class DataHandler extends DataHandlerHook
 {
 
     /**
@@ -34,7 +33,7 @@ class DataHandler extends \GeorgRinger\News\Hooks\DataHandler
      * @param int $id
      * @param $parentObject \TYPO3\CMS\Core\DataHandling\DataHandler
      */
-    public function processDatamap_preProcessFieldArray(&$fieldArray, $table, $id, $parentObject)
+    public function processDatamap_preProcessFieldArray(&$fieldArray, $table, $id, $parentObject): void
     {
         if ($table !== 'tx_news_domain_model_news') {
             return;
@@ -88,7 +87,7 @@ class DataHandler extends \GeorgRinger\News\Hooks\DataHandler
      * @param string $value
      * @param $parentObject \TYPO3\CMS\Core\DataHandling\DataHandler
      */
-    public function processCmdmap_preProcess($command, &$table, $id, $value, $parentObject)
+    public function processCmdmap_preProcess($command, &$table, $id, $value, $parentObject): void
     {
         if ($table !== 'tx_news_domain_model_news') {
             return;

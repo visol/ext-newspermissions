@@ -1,4 +1,6 @@
 <?php
+
+use Visol\Newspermissions\Hooks\DataHandler;
 use Visol\Newspermissions\Hooks\RecordListActionsHook;
 use Visol\Newspermissions\Hooks\FormDataProvider;
 use TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseRowInitializeNew;
@@ -16,9 +18,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRe
     ]
 ];
 
-// todo restore me!
 // Edit restriction for news records
-#$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['news'] = \Visol\Newspermissions\Hooks\DataHandler::class;
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['news'] = DataHandler::class;
 
 // Preview of news records
-#$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['news'] = \Visol\Newspermissions\Hooks\DataHandler::class;
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['news'] = DataHandler::class;
