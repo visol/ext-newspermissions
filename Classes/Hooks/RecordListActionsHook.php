@@ -15,7 +15,6 @@ namespace Visol\Newspermissions\Hooks;
  */
 use TYPO3\CMS\Recordlist\RecordList\RecordListHookInterface;
 use Visol\Newspermissions\Service\AccessControlService;
-use TYPO3\CMS\Backend\Utility\IconUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -78,7 +77,7 @@ class RecordListActionsHook implements RecordListHookInterface
 
             $cells['edit'] = '
                 <div class="btn btn-default" title="' . htmlspecialchars($GLOBALS['LANG']->sL(self::LLPATH . 'listmodule_editlock')) . '">
-                    ' . $this->getIconFactory()->getIcon('apps-pagetree-drag-place-denied', Icon::SIZE_SMALL) . '             
+                    ' . $this->getIconFactory()->getIcon('apps-pagetree-drag-place-denied', Icon::SIZE_SMALL) . '
                 </div>';
 
             $cells['hide'] = $spaceIcon;
