@@ -2,6 +2,14 @@
 
 namespace Visol\Newspermissions\Hooks;
 
+use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Visol\Newspermissions\Service\AccessControlService;
+
 /**
  * This file is part of the TYPO3 CMS project.
  *
@@ -14,22 +22,12 @@ namespace Visol\Newspermissions\Hooks;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
-use Visol\Newspermissions\Service\AccessControlService;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Hook into FormDataProvider
- *
- * @package TYPO3
- * @subpackage tx_newspermissions
  */
 class FormDataProvider implements FormDataProviderInterface
 {
-
     /**
      * Path to the locallang file
      *
@@ -79,13 +77,13 @@ class FormDataProvider implements FormDataProviderInterface
             FlashMessage::class,
             $flashMessageContent,
             htmlspecialchars($GLOBALS['LANG']->sL(self::LLPATH . 'record.savingdisabled.header')),
-            AbstractMessage::WARNING
+            ContextualFeedbackSeverity::WARNING
         );
 
         /** @var FlashMessageService $flashMessageService */
         $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
 
-        /** @var $defaultFlashMessageQueue \TYPO3\CMS\Core\Messaging\FlashMessageQueue */
+        /** @var FlashMessageQueue $defaultFlashMessageQueue */
         $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
         $defaultFlashMessageQueue->enqueue($flashMessage);
     }

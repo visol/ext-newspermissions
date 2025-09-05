@@ -16,15 +16,14 @@ namespace Visol\Newspermissions\Hooks;
  */
 
 use GeorgRinger\News\Hooks\DataHandlerHook;
-use Visol\Newspermissions\Service\AccessControlService;
 use TYPO3\CMS\Backend\Utility\BackendUtility as BackendUtilityCore;
+use Visol\Newspermissions\Service\AccessControlService;
 
 /**
  * Hook into tcemain which is used to show preview of news item
  */
 class DataHandler extends DataHandlerHook
 {
-
     /**
      * Prevent saving of a news record if the editor doesn't have access to all categories of the news record
      *
@@ -43,7 +42,7 @@ class DataHandler extends DataHandlerHook
             return;
         }
 
-        if (!is_integer($id)) {
+        if (!is_int($id)) {
             return;
         }
 
@@ -97,7 +96,7 @@ class DataHandler extends DataHandlerHook
             return;
         }
 
-        if (!is_integer($id) || $command === 'undelete') {
+        if (!is_int($id) || $command === 'undelete') {
             return;
         }
 

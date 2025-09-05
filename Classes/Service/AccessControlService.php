@@ -20,18 +20,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Service for access control related stuff
- *
- * @package TYPO3
- * @subpackage tx_newspermissions
  */
 class AccessControlService extends \GeorgRinger\News\Service\AccessControlService
 {
-
     /**
      * Check if a user has access to all categories of a news record
-     *
-     * @param array $newsRecord
-     * @return boolean
      */
     public static function userHasCategoryPermissionsForRecord(array $newsRecord): bool
     {
@@ -44,13 +37,8 @@ class AccessControlService extends \GeorgRinger\News\Service\AccessControlServic
         if (!$settings->getCategoryBeGroupTceFormsRestriction()) {
             return true;
         }
-
         // If there are any categories with denied access, the user has no permission
-        if (count(self::getAccessDeniedCategories($newsRecord)) === 0) {
-            return true;
-        }
-
-        return false;
+        return count(self::getAccessDeniedCategories($newsRecord)) === 0;
     }
 
     /**
@@ -60,9 +48,6 @@ class AccessControlService extends \GeorgRinger\News\Service\AccessControlServic
      * to use. Since this is not the use-case of this extension, this method is overridden.
      *
      * The method userHasCategoryPermissionsForRecord is unchanged, but needs to be copied because it is static.
-     *
-     * @param array $newsRecord
-     * @return array
      */
     public static function getAccessDeniedCategories(array $newsRecord): array
     {
